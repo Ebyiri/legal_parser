@@ -24,5 +24,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: legal-parser-exe
-          path: "*.exe"
+          name: legal-parser-debug-folder
+          # We tell it to upload the entire distribution folder
+          path: main.dist/
