@@ -22,13 +22,17 @@ jobs:
         with:
           nuitka-version: main
           script-name: src/main.py
-          standalone: true
-          onefile: true
-          enable-plugins: tk-inter
-          windows-console-mode: disable
+          # These flags go here now to avoid the "Unexpected Input" error
+          nuitka-flags: >-
+            --standalone
+            --onefile
+            --enable-plugin=tk-inter
+            --windows-console-mode=disable
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: legal-parser-exe
-          path: build/*.exe
+          path: |
+            build/*.exe
+            dist/*.exe
