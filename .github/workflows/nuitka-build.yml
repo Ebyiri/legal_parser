@@ -1,4 +1,4 @@
-name: Build Windows EXE
+name: Build Rwandan Legal Parser
 on: [push, workflow_dispatch]
 
 jobs:
@@ -13,17 +13,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies and Nuitka
+      - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
-          pip install nuitka zstandard
+          python -m pip install --upgrade pip
+          pip install pymupdf nuitka zstandard
 
-      - name: Build Executable
-        run: python -m nuitka --standalone --windows-console-mode=force --assume-yes-for-downloads src/main.py
+      - name: Build Single File EXE
+        # --include-package=fitz ensures the PDF logic is included
+        # --enable-plugin=tk-inter ensures the UI logic is included
+        run: |
+          python -m nuitka --standalone --onefile --enable-plugin=tk-inter --windows-console-mode=disable --assume-yes-for-downloads --include-package=fitz src/main.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: legal-parser-debug-folder
-          # We tell it to upload the entire distribution folder
-          path: main.dist/
+          name: Rwandan-Legal-Parser-EXE
+          path: "*.exe"
